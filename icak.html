@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Bunga Mekar 🌸</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background: radial-gradient(
+          ellipse at center,
+          #1a1a2e 0%,
+          #16213e 40%,
+          #0f0f23 100%
+        );
+        overflow: hidden;
+        position: relative;
+        font-family: "Georgia", serif;
+      }
+
+      /* Birthday Button */
+      .birthday-button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px 40px;
+        background: linear-gradient(135deg, #ff69b4, #ff1493, #ff69b4);
+        border: none;
+        border-radius: 50px;
+        color: white;
+        font-size: 1.5rem;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 0 20px #ff69b4, 0 0 40px #ff1493;
+        animation: buttonGlow 2s ease-in-out infinite alternate;
+        z-index: 1000;
+        transition: all 0.3s ease;
+      }
+
+      .birthday-button:hover {
+        transform: translate(-50%, -50%) scale(1.1);
+        box-shadow: 0 0 30px #ff69b4, 0 0 60px #ff1493;
+      }
+
+      @keyframes buttonGlow {
+        0% {
+          box-shadow: 0 0 20px #ff69b4, 0 0 40px #ff1493;
+        }
+        100% {
+          box-shadow: 0 0 30px #ff69b4, 0 0 60px #ff1493, 0 0 80px #ff69b4;
+        }
+      }
+
+      /* Birthday Message Card */
+      .birthday-card {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        width: 500px;
+        max-width: 90vw;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 105, 180, 0.1),
+          rgba(255, 20, 147, 0.1)
+        );
+        backdrop-filter: blur(20px);
+        border: 2px solid rgba(255, 105, 180, 0.3);
+        border-radius: 20px;
+        padding: 40px;
+        text-align: center;
+        color: white;
+        z-index: 1001;
+        opacity: 0;
+        transition: all 0.5s ease;
+        box-shadow: 0 0 50px rgba(255, 105, 180, 0.3);
+      }
+
+      .birthday-card.show {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+
+      .birthday-card h1 {
+        font-size: 2.5rem;
+        color: #ff69b4;
+        margin-bottom: 20px;
+        text-shadow: 0 0 10px #ff69b4;
+        animation: textGlow 3s ease-in-out infinite alternate;
+      }
+
+      .birthday-card p {
+        font-size: 1.2rem;
+        line-height: 1.6;
+        margin: 20px 0;
+        color: #ffc0cb;
+      }
+
+      .birthday-photos {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin: 20px 0;
+      }
+
+      .photo-placeholder {
+        width: 100%;
+        height: 80px;
+        background: linear-gradient(135deg, #ff69b4, #ff1493);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2rem;
+        cursor: pointer;
+        border: none;
+        animation: photoSparkle 2s ease-in-out infinite alternate;
+      }
+
+      /* Popup style */
+      .popup {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: none; /* hidden dulu */
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+      }
+
+      .popup img {
+        max-width: 80%;
+        max-height: 80%;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        animation: zoomIn 0.4s ease;
+      }
+
+      @keyframes zoomIn {
+        from {
+          transform: scale(0.7);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      @keyframes photoSparkle {
+        0% {
+          box-shadow: 0 0 10px #ff69b4;
+        }
+        100% {
+          box-shadow: 0 0 20px #ff69b4, 0 0 30px #ff1493;
+        }
+      }
+
+      @keyframes textGlow {
+        0% {
+          text-shadow: 0 0 10px #ff69b4;
+        }
+        100% {
+          text-shadow: 0 0 20px #ff69b4, 0 0 30px #ff1493;
+        }
+      }
+
+      .close-button {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 2rem;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      }
+
+      .close-button:hover {
+        transform: scale(1.2);
+      }
+      .decorative-flowers {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        color: #ff69b4;
+        font-size: 2rem;
+        animation: floatFlower 3s ease-in-out infinite alternate;
+      }
+
+      .decorative-flowers:nth-child(1) {
+        top: 10px;
+        left: 10px;
+      }
+
+      .decorative-flowers:nth-child(2) {
+        top: 10px;
+        right: 10px;
+        animation-delay: 0.5s;
+      }
+
+      .decorative-flowers:nth-child(3) {
+        bottom: 10px;
+        left: 10px;
+        animation-delay: 1s;
+      }
+
+      .decorative-flowers:nth-child(4) {
+        bottom: 10px;
+        right: 10px;
+        animation-delay: 1.5s;
+      }
+
+      @keyframes floatFlower {
+        0% {
+          transform: translateY(0px) rotate(0deg);
+        }
+        100% {
+          transform: translateY(-10px) rotate(10deg);
+        }
+      }
+
+      .flower {
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        animation: gentleSway 6s ease-in-out infinite alternate;
+      }
+
+      .petal {
+        position: absolute;
+        width: 32px;
+        height: 48px;
+        background: radial-gradient(circle at center, #ff4d6d, #ff99cc);
+        border-radius: 50% 50% 50% 50%;
+        opacity: 0;
+        transform: scale(0) rotate(0deg);
+        transform-origin: 50% 90%;
+        left: 50%;
+        top: 50%;
+        margin-left: -16px;
+        margin-top: -24px;
+        animation: bloom 3s ease-out forwards;
+      }
+
+      .flower-center {
+        display: none; /* Hide the yellow center */
+      }
+
+      @keyframes bloom {
+        0% {
+          opacity: 0;
+          transform: scale(0) rotate(var(--angle));
+        }
+        50% {
+          opacity: 0.8;
+          transform: scale(0.7) rotate(var(--angle));
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1) rotate(var(--angle));
+        }
+      }
+
+      @keyframes centerAppear {
+        0% {
+          opacity: 0;
+          transform: scale(0);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes gentleSway {
+        0% {
+          transform: rotate(-2deg) scale(1);
+        }
+        100% {
+          transform: rotate(2deg) scale(1.02);
+        }
+      }
+
+      /* Sparkle Effects - Enhanced for dark background */
+      .sparkle {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background: #fff;
+        border-radius: 50%;
+        animation: sparkleAnimation 2s ease-in-out infinite;
+        box-shadow: 0 0 10px #fff, 0 0 20px #ff69b4, 0 0 30px #ff69b4;
+      }
+
+      .sparkle::before {
+        content: "";
+        position: absolute;
+        width: 2px;
+        height: 12px;
+        background: #fff;
+        left: 50%;
+        top: -3px;
+        margin-left: -1px;
+        box-shadow: 0 0 8px #ff69b4, 0 0 15px #ff69b4;
+      }
+
+      .sparkle::after {
+        content: "";
+        position: absolute;
+        width: 12px;
+        height: 2px;
+        background: #fff;
+        left: -3px;
+        top: 50%;
+        margin-top: -1px;
+        box-shadow: 0 0 8px #ff69b4, 0 0 15px #ff69b4;
+      }
+
+      @keyframes sparkleAnimation {
+        0%,
+        100% {
+          opacity: 0;
+          transform: scale(0) rotate(0deg);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1) rotate(180deg);
+        }
+      }
+
+      /* Floating sparkles - Enhanced for space background */
+      .floating-sparkle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: #fff;
+        border-radius: 50%;
+        animation: floatSparkle 4s ease-in-out infinite;
+        box-shadow: 0 0 12px #ff69b4, 0 0 24px #ff69b4, 0 0 36px #ff1493;
+      }
+
+      @keyframes floatSparkle {
+        0% {
+          opacity: 0;
+          transform: translateY(0px) scale(0);
+        }
+        25% {
+          opacity: 1;
+          transform: translateY(-20px) scale(1);
+        }
+        75% {
+          opacity: 1;
+          transform: translateY(-40px) scale(1.2);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(-60px) scale(0);
+        }
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .birthday-button {
+          padding: 15px 25px;
+          font-size: 1.2rem;
+        }
+
+        .birthday-card {
+          width: 95%;
+          padding: 20px;
+        }
+
+        .birthday-card h1 {
+          font-size: 1.8rem;
+        }
+
+        .birthday-card p {
+          font-size: 1rem;
+        }
+
+        .birthday-photos {
+          grid-template-columns: repeat(2, 1fr); /* dari 3 jadi 2 kolom */
+          gap: 8px;
+        }
+
+        .photo-placeholder {
+          height: 70px;
+          font-size: 1.5rem;
+        }
+
+        .popup img {
+          max-width: 90%;
+          max-height: 70%;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .birthday-button {
+          padding: 12px 20px;
+          font-size: 1rem;
+        }
+
+        .birthday-card {
+          padding: 15px;
+        }
+
+        .birthday-card h1 {
+          font-size: 1.5rem;
+        }
+
+        .birthday-card p {
+          font-size: 0.9rem;
+        }
+
+        .birthday-photos {
+          grid-template-columns: 1fr; /* jadi 1 kolom biar lega */
+        }
+
+        .photo-placeholder {
+          height: 60px;
+          font-size: 1.2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Birthday Button -->
+    <button class="birthday-button" id="birthdayBtn">
+      🎁 Message for You 💖
+    </button>
+
+    <!-- Birthday Message Card -->
+    <div class="birthday-card" id="birthdayCard">
+      <!-- <button class="close-button" id="closeBtn">✕</button> -->
+      <div class="decorative-flowers">🌸</div>
+      <div class="decorative-flowers">🌺</div>
+      <div class="decorative-flowers">🌸</div>
+      <div class="decorative-flowers">🌺</div>
+
+      <h1>🎉 Happy Birthday! ICAKKK 🎂</h1>
+      <p>
+        Wishing you a day filled with happiness and a year filled with joy! 💕
+      </p>
+      <p>Click button bellow!</p>
+
+      <div class="birthday-photos">
+        <button class="photo-placeholder" data-img="img/1.jpg">🎈</button>
+        <button class="photo-placeholder" data-img="img/2.jpg">🎂</button>
+        <button class="photo-placeholder" data-img="img/3.jpg">🎁</button>
+        <button class="photo-placeholder" data-img="img/4.jpg">🌸</button>
+        <button class="photo-placeholder" data-img="img/5.jpg">💕</button>
+        <button class="photo-placeholder" data-img="img/6.jpg">✨</button>
+      </div>
+
+      <!-- Popup Modal -->
+      <div class="popup" id="popup">
+        <button class="close-button" id="closeBtn"></button>
+        <img id="popupImg" src="" alt="Birthday Photo" />
+      </div>
+
+      <p>
+        <em
+          >"Life is a beautiful journey, just like uu love. Happy Birthday!"</em
+        >
+        🌺
+      </p>
+    </div>
+    <script>
+      // Function to create flowers
+      function createFlowers() {
+        const numFlowers = 15;
+
+        for (let f = 0; f < numFlowers; f++) {
+          const flower = document.createElement("div");
+          flower.className = "flower";
+
+          // Random positioning
+          flower.style.left = Math.random() * 90 + 5 + "%";
+          flower.style.top = Math.random() * 90 + 5 + "%";
+          flower.style.animationDelay = Math.random() * 3 + "s";
+
+          const numPetals = 8; // Less petals for smaller flowers
+
+          // Create petals for each flower
+          for (let i = 0; i < numPetals; i++) {
+            const petal = document.createElement("div");
+            petal.classList.add("petal");
+            const angle = (360 / numPetals) * i;
+            petal.style.setProperty("--angle", angle + "deg");
+            petal.style.animationDelay = 0.15 * i + f * 0.3 + "s";
+            flower.appendChild(petal);
+          }
+
+          // Create flower center
+          const center = document.createElement("div");
+          center.classList.add("flower-center");
+          flower.appendChild(center);
+
+          document.body.appendChild(flower);
+        }
+      }
+
+      // Function to create sparkles around flowers
+      function createSparkles() {
+        const flowers = document.querySelectorAll(".flower");
+
+        flowers.forEach((flower, index) => {
+          // Create sparkles around each flower - more sparkles for space effect
+          for (let i = 0; i < 6; i++) {
+            const sparkle = document.createElement("div");
+            sparkle.className = "sparkle";
+
+            const angle = 60 * i + Math.random() * 40;
+            const distance = 40 + Math.random() * 30;
+            const x = Math.cos((angle * Math.PI) / 180) * distance;
+            const y = Math.sin((angle * Math.PI) / 180) * distance;
+
+            sparkle.style.left = `calc(50% + ${x}px)`;
+            sparkle.style.top = `calc(50% + ${y}px)`;
+            sparkle.style.animationDelay =
+              i * 0.3 + index * 0.2 + Math.random() * 3 + "s";
+
+            flower.appendChild(sparkle);
+          }
+        });
+      }
+
+      // Function to create floating sparkles
+      function createFloatingSparkles() {
+        setInterval(() => {
+          const sparkle = document.createElement("div");
+          sparkle.className = "floating-sparkle";
+
+          sparkle.style.left = Math.random() * 100 + "%";
+          sparkle.style.top = Math.random() * 100 + "%";
+          sparkle.style.animationDelay = "0s";
+
+          document.body.appendChild(sparkle);
+
+          // Remove sparkle after animation
+          setTimeout(() => {
+            sparkle.remove();
+          }, 4000);
+        }, 600); // More frequent sparkles for space effect
+      }
+
+      // Initialize everything
+      document.addEventListener("DOMContentLoaded", function () {
+        createFlowers();
+
+        // Wait a bit for flowers to be created, then add sparkles
+        setTimeout(() => {
+          createSparkles();
+          createFloatingSparkles();
+        }, 500);
+
+        // Birthday button functionality
+        const birthdayBtn = document.getElementById("birthdayBtn");
+        const birthdayCard = document.getElementById("birthdayCard");
+        const closeBtn = document.getElementById("closeBtn");
+
+        birthdayBtn.addEventListener("click", () => {
+          birthdayCard.classList.add("show");
+          birthdayBtn.style.display = "none";
+
+          // Create extra sparkles when card opens
+          createExtraSparkles();
+        });
+
+        closeBtn.addEventListener("click", () => {
+          birthdayCard.classList.remove("show");
+          birthdayBtn.style.display = "block";
+        });
+
+        // Close card when clicking outside
+        birthdayCard.addEventListener("click", (e) => {
+          if (e.target === birthdayCard) {
+            birthdayCard.classList.remove("show");
+            birthdayBtn.style.display = "block";
+          }
+        });
+      });
+
+      // Function to create extra sparkles when card opens
+      function createExtraSparkles() {
+        for (let i = 0; i < 20; i++) {
+          setTimeout(() => {
+            const sparkle = document.createElement("div");
+            sparkle.className = "floating-sparkle";
+
+            sparkle.style.left = Math.random() * 100 + "%";
+            sparkle.style.top = Math.random() * 100 + "%";
+            sparkle.style.animationDelay = "0s";
+
+            document.body.appendChild(sparkle);
+
+            setTimeout(() => {
+              sparkle.remove();
+            }, 4000);
+          }, i * 100);
+        }
+      }
+
+      // Mouse interaction - flowers glow when hovered
+      document.addEventListener("mousemove", (e) => {
+        const flowers = document.querySelectorAll(".flower");
+        flowers.forEach((flower) => {
+          const rect = flower.getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
+          const distance = Math.sqrt(
+            Math.pow(e.clientX - centerX, 2) + Math.pow(e.clientY - centerY, 2)
+          );
+
+          if (distance < 100) {
+            flower.style.filter =
+              "drop-shadow(0 0 20px #ff69b4) brightness(1.2)";
+            flower.style.transform = `scale(${1 + (100 - distance) / 400})`;
+          } else {
+            flower.style.filter = "none";
+            flower.style.transform = "scale(1)";
+          }
+        });
+      });
+    </script>
+
+    <script>
+      const buttons = document.querySelectorAll(".photo-placeholder");
+      const popup = document.getElementById("popup");
+      const popupImg = document.getElementById("popupImg");
+      const closeBtn = document.getElementById("closeBtn");
+
+      buttons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const imgSrc = btn.getAttribute("data-img");
+          popupImg.src = imgSrc;
+          popup.style.display = "flex";
+        });
+      });
+
+      closeBtn.addEventListener("click", () => {
+        popup.style.display = "none";
+      });
+
+      popup.addEventListener("click", (e) => {
+        if (e.target === popup) popup.style.display = "none"; // klik luar gambar nutup popup
+      });
+    </script>
+  </body>
+</html>
